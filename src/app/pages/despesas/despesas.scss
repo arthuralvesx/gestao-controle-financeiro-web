@@ -1,0 +1,22 @@
+@use '../../shared/styles/tokens' as t;
+
+:host {
+  display: block;
+  font-family: t.$font-sans;
+  padding: 1.25rem 1.25rem 2.5rem;
+}
+
+.page__title {
+  margin: 0 0 0.4rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: t.$text-primary;
+}
+
+.page__text {
+  margin: 0;
+  max-width: 40rem;
+  color: t.$text-muted;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}

@@ -1,0 +1,80 @@
+<section class="painel" aria-label="Painel financeiro">
+  <div class="painel__inner">
+    <header class="painel__hero">
+      <h1 class="painel__title">Olá, {{ userEmail() }} <span class="painel__wave" aria-hidden="true">👋</span></h1>
+      <p class="painel__subtitle">Aqui está o resumo das suas finanças</p>
+    </header>
+
+    <div class="painel__month" role="group" aria-label="Selecionar mês de referência">
+      <button type="button" class="painel__month-nav" (click)="previousMonth()" aria-label="Mês anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M15 6 9 12l6 6" />
+        </svg>
+      </button>
+      <div class="painel__month-pill">
+        <span class="painel__month-label">{{ monthTitle() }}</span>
+        @if (isCurrentMonth()) {
+          <span class="painel__month-badge">Atual</span>
+        }
+      </div>
+      <button type="button" class="painel__month-nav" (click)="nextMonth()" aria-label="Próximo mês">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="m9 6 6 6-6 6" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="painel__grid">
+      <article class="stat">
+        <div class="stat__icon stat__icon--income" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 16l4-4 3 3 5-5 4 4" />
+            <path d="M4 20h16" />
+          </svg>
+        </div>
+        <div class="stat__meta">
+          <div class="stat__label">Receita</div>
+          <div class="stat__value">{{ formatBrl(receitas()) }}</div>
+        </div>
+      </article>
+
+      <article class="stat">
+        <div class="stat__icon stat__icon--expense" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 8l4 4 3-3 5 5 4-4" />
+            <path d="M4 4h16" />
+          </svg>
+        </div>
+        <div class="stat__meta">
+          <div class="stat__label">Despesas</div>
+          <div class="stat__value">{{ formatBrl(despesas()) }}</div>
+          <div class="stat__hint">{{ despesaPercentReceita() | number: '1.0-0' }}% da receita</div>
+        </div>
+      </article>
+
+      <article class="stat stat--balance">
+        <div class="stat__icon stat__icon--balance" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12H4V6Z" />
+            <path d="M4 10h16" />
+            <path d="M8 14h2" />
+          </svg>
+        </div>
+        <div class="stat__meta">
+          <div class="stat__label">Disponível</div>
+          <div class="stat__value stat__value--emerald">{{ formatBrl(disponivel()) }}</div>
+        </div>
+      </article>
+    </div>
+
+    <section class="painel__section" aria-labelledby="painel-cat-title">
+      <div class="painel__section-head">
+        <h2 id="painel-cat-title" class="painel__section-title">Despesas por categoria</h2>
+        <a class="painel__section-link" routerLink="/despesas">Editar</a>
+      </div>
+      <div class="painel__empty" role="status">
+        Nenhuma despesa cadastrada neste mês
+      </div>
+    </section>
+  </div>
+</section>

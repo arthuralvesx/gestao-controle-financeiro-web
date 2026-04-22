@@ -1,0 +1,146 @@
+.login {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 3.5rem 1.25rem 5.5rem;
+  position: relative;
+}
+
+.login__wrap {
+  width: min(420px, 92vw);
+  display: grid;
+  gap: 1.1rem;
+  place-items: center;
+}
+
+.brand {
+  display: grid;
+  place-items: center;
+  gap: 0.55rem;
+  text-align: center;
+}
+
+.brand__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, rgba(30, 132, 86, 0.35), rgba(10, 18, 24, 0.15));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: rgba(116, 255, 192, 0.95);
+}
+
+.brand__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.brand__name {
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: rgba(90, 255, 175, 0.9);
+}
+
+.brand__tag {
+  font-size: 0.82rem;
+  color: rgba(232, 238, 246, 0.55);
+}
+
+.card {
+  width: 100%;
+  border-radius: 14px;
+  background: rgba(10, 14, 18, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 20px 70px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  padding: 1.05rem;
+}
+
+.form {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.field__label {
+  font-size: 0.78rem;
+  color: rgba(232, 238, 246, 0.6);
+}
+
+.field__input {
+  width: 100%;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(7, 10, 13, 0.55);
+  color: rgba(232, 238, 246, 0.9);
+  outline: none;
+  padding: 0 0.85rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.field__input::placeholder {
+  color: rgba(232, 238, 246, 0.28);
+}
+
+.field__input:focus {
+  border-color: rgba(90, 255, 175, 0.28);
+  box-shadow:
+    0 0 0 3px rgba(40, 185, 120, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.error {
+  font-size: 0.82rem;
+  color: rgba(255, 150, 150, 0.92);
+  background: rgba(255, 70, 70, 0.08);
+  border: 1px solid rgba(255, 70, 70, 0.18);
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+}
+
+.btn {
+  height: 42px;
+  border-radius: 10px;
+  border: 0;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(4, 10, 8, 0.95);
+  background: linear-gradient(180deg, rgba(96, 255, 179, 0.95), rgba(41, 199, 126, 0.92));
+  box-shadow:
+    0 14px 35px rgba(20, 140, 85, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn__arrow {
+  font-size: 1.1rem;
+  transform: translateY(-0.5px);
+}
+
+.pager {
+  position: absolute;
+  bottom: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 0.65;
+}

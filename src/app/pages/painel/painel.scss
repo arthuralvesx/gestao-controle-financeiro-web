@@ -1,0 +1,245 @@
+@use '../../shared/styles/tokens' as t;
+
+:host {
+  display: block;
+  font-family: t.$font-sans;
+}
+
+.painel {
+  padding: 2.25rem 1.25rem 3.5rem;
+  background: t.$bg-page;
+}
+
+.painel__inner {
+  max-width: t.$container-max;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.painel__hero {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.painel__title {
+  margin: 0;
+  font-size: clamp(1.45rem, 2.4vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: t.$text-primary;
+}
+
+.painel__wave {
+  display: inline-block;
+  margin-left: 0.15rem;
+}
+
+.painel__subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: t.$text-muted;
+}
+
+.painel__month {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.painel__month-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: t.$radius-pill;
+  background: t.$bg-elevated;
+  border: 1px solid t.$border-subtle;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.painel__month-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: t.$text-primary;
+}
+
+.painel__month-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: t.$emerald;
+  background: t.$emerald-glow;
+  border: 1px solid t.$border-emerald;
+  border-radius: t.$radius-pill;
+  padding: 0.2rem 0.45rem;
+}
+
+.painel__month-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: t.$radius-pill;
+  border: 1px solid t.$border-subtle;
+  background: rgba(255, 255, 255, 0.04);
+  color: t.$text-muted;
+  cursor: pointer;
+  padding: 0;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.painel__month-nav:hover {
+  color: t.$text-primary;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.painel__month-nav svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.painel__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.stat {
+  display: flex;
+  gap: 0.9rem;
+  padding: 1.1rem 1.15rem;
+  border-radius: t.$radius-lg;
+  background: t.$bg-card;
+  border: 1px solid t.$border-subtle;
+  box-shadow: t.$shadow-card;
+  align-items: flex-start;
+}
+
+.stat--balance {
+  border-color: t.$border-emerald;
+  box-shadow: t.$shadow-card, 0 0 0 1px rgba(16, 185, 129, 0.08) inset, 0 0 32px t.$emerald-glow;
+}
+
+.stat__icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.stat__icon--income {
+  color: t.$emerald;
+  background: t.$emerald-glow;
+  border: 1px solid rgba(16, 185, 129, 0.22);
+}
+
+.stat__icon--expense {
+  color: t.$red-expense;
+  background: t.$red-expense-bg;
+  border: 1px solid rgba(248, 113, 113, 0.22);
+}
+
+.stat__icon--balance {
+  color: t.$emerald;
+  background: t.$emerald-glow;
+  border: 1px solid rgba(16, 185, 129, 0.22);
+}
+
+.stat__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.stat__label {
+  font-size: 0.82rem;
+  color: t.$text-muted;
+  font-weight: 500;
+}
+
+.stat__value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: t.$text-primary;
+  letter-spacing: -0.02em;
+}
+
+.stat__value--emerald {
+  color: t.$emerald;
+}
+
+.stat__hint {
+  margin-top: 0.2rem;
+  font-size: 0.75rem;
+  color: t.$text-faint;
+}
+
+.painel__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.painel__section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.painel__section-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: t.$text-primary;
+}
+
+.painel__section-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: t.$emerald;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.painel__section-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.painel__empty {
+  border-radius: t.$radius-lg;
+  min-height: 7.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  color: t.$text-muted;
+  background: t.$bg-card;
+  border: 1px dashed t.$border-subtle;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+  .painel__grid {
+    grid-template-columns: 1fr;
+  }
+}

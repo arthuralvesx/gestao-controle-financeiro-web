@@ -1,0 +1,55 @@
+<main class="login">
+  <div class="login__wrap">
+    <div class="brand">
+      <div class="brand__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path
+            d="M7 14l3-3 3 3 4-4"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <div class="brand__name">FFB</div>
+      <div class="brand__tag">Controle suas finanças de forma inteligente</div>
+    </div>
+
+    <section class="card" aria-label="Login">
+      <form class="form" [formGroup]="form" (ngSubmit)="submit()">
+        <label class="field">
+          <div class="field__label">Email</div>
+          <input
+            class="field__input"
+            type="email"
+            inputmode="email"
+            autocomplete="username"
+            placeholder="seu@email.com"
+            formControlName="email"
+          />
+        </label>
+
+        <label class="field">
+          <div class="field__label">Senha</div>
+          <input
+            class="field__input"
+            type="password"
+            autocomplete="current-password"
+            placeholder="••••••••"
+            formControlName="senha"
+          />
+        </label>
+
+        @if (errorMessage()) {
+          <div class="error" role="alert">{{ errorMessage() }}</div>
+        }
+
+        <button class="btn" type="submit" [disabled]="isSubmitting()">
+          <span>Entrar</span>
+          <span class="btn__arrow" aria-hidden="true">→</span>
+        </button>
+      </form>
+    </section>
+  </div>
+</main>

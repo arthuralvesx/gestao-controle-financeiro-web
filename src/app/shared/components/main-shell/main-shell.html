@@ -1,0 +1,80 @@
+<div class="shell">
+  <header class="shell__header">
+    <div class="shell__inner">
+      <a class="shell__logo" routerLink="/painel" aria-label="Ir para o painel">
+        <span class="shell__logo-mark" aria-hidden="true">FFB</span>
+      </a>
+
+      <nav class="shell__nav" aria-label="Navegação principal">
+        <a
+          class="shell__nav-item"
+          routerLink="/painel"
+          routerLinkActive="shell__nav-item--active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <span class="shell__nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <rect x="3" y="3" width="7" height="7" rx="1.2" />
+              <rect x="14" y="3" width="7" height="7" rx="1.2" />
+              <rect x="3" y="14" width="7" height="7" rx="1.2" />
+              <rect x="14" y="14" width="7" height="7" rx="1.2" />
+            </svg>
+          </span>
+          Painel
+        </a>
+        <a class="shell__nav-item" routerLink="/receita" routerLinkActive="shell__nav-item--active">
+          <span class="shell__nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <path d="M12 3v18M17 8H9.5a3.5 3.5 0 0 0 0 7H15a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+          </span>
+          Receita
+        </a>
+        <a class="shell__nav-item" routerLink="/despesas" routerLinkActive="shell__nav-item--active">
+          <span class="shell__nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <rect x="2" y="5" width="20" height="14" rx="2" />
+              <path d="M2 10h20" />
+            </svg>
+          </span>
+          Despesas
+        </a>
+        <a class="shell__nav-item" routerLink="/metas" routerLinkActive="shell__nav-item--active">
+          <span class="shell__nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <circle cx="12" cy="12" r="9" />
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 3v2M12 19v2M3 12h2M19 12h2" />
+            </svg>
+          </span>
+          Metas
+        </a>
+        <a class="shell__nav-item" routerLink="/ia" routerLinkActive="shell__nav-item--active">
+          <span class="shell__nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <rect x="5" y="7" width="14" height="12" rx="2" />
+              <path d="M9 11h1.5M13.5 11H15M10 15h4" />
+              <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            </svg>
+          </span>
+          IA
+        </a>
+      </nav>
+
+      <div class="shell__user">
+        <span class="shell__greet">Olá, {{ userEmail() }}</span>
+        <button type="button" class="shell__logout" (click)="logout()" aria-label="Sair">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+            <path d="M10 17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" />
+            <path d="M15 12H8" />
+            <path d="m19 12-3 3m3-3-3-3" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell__main">
+    <router-outlet />
+  </main>
+</div>
