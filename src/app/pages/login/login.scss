@@ -61,6 +61,32 @@
   padding: 1.05rem;
 }
 
+.mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+  margin-bottom: 0.95rem;
+  padding: 0.25rem;
+  border-radius: 10px;
+  background: rgba(7, 10, 13, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mode__btn {
+  height: 34px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(232, 238, 246, 0.62);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mode__btn--active {
+  background: rgba(96, 255, 179, 0.14);
+  color: rgba(116, 255, 192, 0.96);
+}
+
 .form {
   display: grid;
   gap: 0.9rem;
@@ -99,11 +125,25 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
+.field__hint {
+  font-size: 0.72rem;
+  color: rgba(232, 238, 246, 0.42);
+}
+
 .error {
   font-size: 0.82rem;
   color: rgba(255, 150, 150, 0.92);
   background: rgba(255, 70, 70, 0.08);
   border: 1px solid rgba(255, 70, 70, 0.18);
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+}
+
+.success {
+  font-size: 0.82rem;
+  color: rgba(145, 255, 195, 0.95);
+  background: rgba(40, 185, 120, 0.09);
+  border: 1px solid rgba(40, 185, 120, 0.2);
   border-radius: 10px;
   padding: 0.6rem 0.75rem;
 }
@@ -134,6 +174,21 @@
 .btn__arrow {
   font-size: 1.1rem;
   transform: translateY(-0.5px);
+}
+
+.link-btn {
+  border: 0;
+  background: transparent;
+  color: rgba(116, 255, 192, 0.9);
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.15rem;
+}
+
+.link-btn:hover,
+.link-btn:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .pager {

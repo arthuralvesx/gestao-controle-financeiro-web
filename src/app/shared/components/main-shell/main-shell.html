@@ -5,7 +5,7 @@
         <span class="shell__logo-mark" aria-hidden="true">FFB</span>
       </a>
 
-      <nav class="shell__nav" aria-label="Navegação principal">
+      <nav class="shell__nav" aria-label="Navegacao principal">
         <a
           class="shell__nav-item"
           routerLink="/painel"
@@ -62,7 +62,7 @@
       </nav>
 
       <div class="shell__user">
-        <span class="shell__greet">Olá, {{ userEmail() }}</span>
+        <span class="shell__greet">Ola, {{ userName() }}</span>
         <button type="button" class="shell__logout" (click)="logout()" aria-label="Sair">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
             <path d="M10 17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" />

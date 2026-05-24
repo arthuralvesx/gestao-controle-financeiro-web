@@ -1,9 +1,15 @@
 @use '../../shared/styles/tokens' as t;
 
 :host {
-  display: block;
+  display: grid;
+  min-height: calc(100dvh - 4rem);
+  place-items: center;
   font-family: t.$font-sans;
   padding: 1.25rem 1.25rem 2.5rem;
+}
+
+.page {
+  text-align: center;
 }
 
 .page__title {

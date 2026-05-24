@@ -13,10 +13,19 @@
         </svg>
       </div>
       <div class="brand__name">FFB</div>
-      <div class="brand__tag">Controle suas finanças de forma inteligente</div>
+      <div class="brand__tag">Controle financeiro com dados persistentes</div>
     </div>
 
-    <section class="card" aria-label="Login">
+    <section class="card" aria-label="Acesso ao sistema">
+      <div class="mode" role="tablist" aria-label="Modo de acesso">
+        <button type="button" [class.mode__btn--active]="!isRegisterMode()" class="mode__btn" (click)="isRegisterMode.set(false)">
+          Entrar
+        </button>
+        <button type="button" [class.mode__btn--active]="isRegisterMode()" class="mode__btn" (click)="isRegisterMode.set(true)">
+          Criar conta
+        </button>
+      </div>
+
       <form class="form" [formGroup]="form" (ngSubmit)="submit()">
         <label class="field">
           <div class="field__label">Email</div>
@@ -27,7 +36,9 @@
             autocomplete="username"
             placeholder="seu@email.com"
             formControlName="email"
+            aria-describedby="email-help"
           />
+          <span id="email-help" class="field__hint">Use o email cadastrado na sua conta.</span>
         </label>
 
         <label class="field">
@@ -36,7 +47,7 @@
             class="field__input"
             type="password"
             autocomplete="current-password"
-            placeholder="••••••••"
+            placeholder="Minimo 6 caracteres"
             formControlName="senha"
           />
         </label>
@@ -45,9 +56,17 @@
           <div class="error" role="alert">{{ errorMessage() }}</div>
         }
 
+        @if (successMessage()) {
+          <div class="success" role="status">{{ successMessage() }}</div>
+        }
+
         <button class="btn" type="submit" [disabled]="isSubmitting()">
-          <span>Entrar</span>
+          <span>{{ isSubmitting() ? 'Aguarde...' : (isRegisterMode() ? 'Criar conta' : 'Entrar') }}</span>
           <span class="btn__arrow" aria-hidden="true">→</span>
+        </button>
+
+        <button class="link-btn" type="button" (click)="toggleMode()">
+          {{ isRegisterMode() ? 'Ja tenho conta' : 'Ainda nao tenho conta' }}
         </button>
       </form>
     </section>

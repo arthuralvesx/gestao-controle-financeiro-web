@@ -1,4 +1,124 @@
 <section class="page" aria-label="Metas">
-  <h1 class="page__title">Metas</h1>
-  <p class="page__text">Estrutura da página. O conteúdo será implementado em etapa futura.</p>
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="meta-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16 3 11l18-7-4 7Z" /><path d="m21 16-8-5" /><path d="m10 20 3-9" /></symbol>
+    <symbol id="meta-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7" /><path d="M5 9v11h14V9" /><path d="M10 20v-6h4v6" /></symbol>
+    <symbol id="meta-car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m5 11 1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11" /><rect x="4" y="11" width="16" height="7" rx="2" /><path d="M7 18v2M17 18v2" /><path d="M8 14h.01M16 14h.01" /></symbol>
+    <symbol id="meta-trend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 6-6 4 4 8-8" /><path d="M15 7h6v6" /></symbol>
+    <symbol id="meta-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5Z" /><path d="M4 5.5v16" /><path d="M8 7h8" /></symbol>
+    <symbol id="meta-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2" /><path d="M12 8v13" /><path d="M3 13h18" /><path d="M12 8H8a2 2 0 1 1 2-2c0 2 2 2 2 2Z" /><path d="M12 8h4a2 2 0 1 0-2-2c0 2-2 2-2 2Z" /></symbol>
+    <symbol id="meta-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /><path d="M12 3v2M12 19v2M3 12h2M19 12h2" /></symbol>
+  </svg>
+
+  <div class="page__head">
+    <div>
+      <h1 class="page__title">Metas de economia</h1>
+      <p class="page__disp">
+        Disponivel:
+        <span [class.pos]="disponivel() >= 0" [class.neg]="disponivel() < 0">
+          {{ formatBrl(disponivel()) }}
+        </span>
+      </p>
+    </div>
+    <button class="btn-nova" (click)="openForm()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Nova meta
+    </button>
+  </div>
+
+  @if (showForm()) {
+    <div class="form-card">
+      <h2 class="form-card__title">Nova meta</h2>
+
+      <span class="form__label">Tema</span>
+      <div class="tema-grid">
+        @for (cat of metaCategorias; track cat.id) {
+          <button class="tema-btn" [class.tema-btn--active]="formCategoria === cat.id" (click)="setCategoria(cat.id)" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <use [attr.href]="'#meta-' + cat.icon"></use>
+            </svg>
+            {{ cat.label }}
+          </button>
+        }
+      </div>
+
+      <div class="form__2col">
+        <div class="form__col">
+          <label class="form__label" for="vm">Meta total (R$)</label>
+          <input id="vm" class="form__input" type="number" min="0" step="0.01" [value]="formValorMeta" (input)="formValorMeta = $any($event.target).value" />
+        </div>
+        <div class="form__col">
+          <label class="form__label" for="vi">Valor inicial (R$)</label>
+          <input id="vi" class="form__input" type="number" min="0" step="0.01" placeholder="0" [value]="formValorInicial" (input)="formValorInicial = $any($event.target).value" />
+        </div>
+      </div>
+
+      <div class="form__btns">
+        <button class="btn-adicionar" (click)="adicionar()" [disabled]="saving()">
+          {{ saving() ? 'Adicionando...' : 'Adicionar' }}
+        </button>
+        <button class="btn-cancelar" (click)="showForm.set(false)">Cancelar</button>
+      </div>
+    </div>
+  }
+
+  @if (metas().length === 0 && !showForm()) {
+    <p class="empty" role="status">Nenhuma meta criada ainda. Comece definindo para onde seu dinheiro vai.</p>
+  }
+
+  <div class="metas-list">
+    @for (m of metas(); track m.id) {
+      <div class="meta-card">
+        <div class="meta-card__head">
+          <div class="meta-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <use [attr.href]="'#meta-' + getIcon(m.metaCategoria)"></use>
+            </svg>
+          </div>
+          <div class="meta-card__info">
+            <span class="meta-card__name">{{ m.metaCategoria }}</span>
+            <span class="meta-card__goal">Meta: {{ formatBrl(m.valorMeta) }}</span>
+          </div>
+          <button class="meta-card__del" (click)="excluir(m.id)" [attr.aria-label]="'Excluir meta ' + m.metaCategoria">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="progresso(m)"></div>
+          </div>
+          <div class="progress-info">
+            <span>{{ formatBrl(m.valor) }} guardado</span>
+            <span>{{ progresso(m) | number: '1.0-1' }}%</span>
+          </div>
+        </div>
+
+        @if (guardandoId() !== m.id) {
+          <button class="btn-guardar" (click)="openGuardar(m.id)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+            Guardar dinheiro
+          </button>
+        } @else {
+          <div class="guardar-form">
+            <div class="g-row">
+              <span class="g-pre">R$</span>
+              <input class="g-input" type="number" min="0" step="0.01" placeholder="Valor a guardar" [value]="guardandoValor" (input)="guardandoValor = $any($event.target).value" />
+            </div>
+            <div class="form__btns">
+              <button class="btn-adicionar" (click)="guardar(m)">Confirmar</button>
+              <button class="btn-cancelar" (click)="guardandoId.set(null)">Cancelar</button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
 </section>
