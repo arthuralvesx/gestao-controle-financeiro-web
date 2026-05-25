@@ -77,13 +77,21 @@ export class DespesasPage implements OnInit {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
   }
 
-  protected formatMoneyInput(value: string): string {
-    const amount = this.parseMoney(value);
-    if (amount === null) return '';
-    return new Intl.NumberFormat('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(amount);
+  protected formatMoneyInput(value: string, previous = ''): string {
+    const normalizedInput = this.normalizeCurrencyTyping(value, previous);
+    const hasDecimal = normalizedInput.includes(',');
+    const onlyDigits = normalizedInput.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
+
+    if (!onlyDigits) return '';
+
+    if (hasDecimal) {
+      const [integerPart, decimalPart = ''] = normalizedInput.split(',');
+      const integerDigits = integerPart.replace(/\D/g, '').replace(/^0+(?=\d)/, '') || '0';
+      return `${this.groupThousands(integerDigits)},${decimalPart.replace(/\D/g, '').padEnd(2, '0').slice(0, 2)}`;
+    }
+
+    const integerValue = this.groupThousands(onlyDigits);
+    return onlyDigits.length >= 4 ? `${integerValue},00` : integerValue;
   }
 
   protected openModal() {
@@ -114,6 +122,17 @@ export class DespesasPage implements OnInit {
     const normalized = value.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
     const amount = Number(normalized);
     return Number.isFinite(amount) ? amount : null;
+  }
+
+  private normalizeCurrencyTyping(value: string, previous: string): string {
+    if (previous.endsWith(',00') && value.startsWith(previous) && value.length > previous.length) {
+      return `${previous.slice(0, -3)}${value.slice(previous.length)}`;
+    }
+    return value;
+  }
+
+  private groupThousands(value: string): string {
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   }
 
   protected excluir(id: number) {
