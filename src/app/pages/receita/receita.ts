@@ -32,6 +32,15 @@ export class ReceitaPage implements OnInit {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
   }
 
+  protected formatMoneyInput(value: string): string {
+    const amount = this.parseMoney(value);
+    if (amount === null) return '';
+    return new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  }
+
   ngOnInit() {
     this.load();
   }
@@ -41,12 +50,12 @@ export class ReceitaPage implements OnInit {
   }
 
   protected openForm() {
-    this.editValor = this.totalAtual() > 0 ? String(this.totalAtual()) : '';
+    this.editValor = this.totalAtual() > 0 ? this.formatMoneyInput(String(this.totalAtual())) : '';
     this.showForm.set(true);
   }
 
   protected save() {
-    const valor = parseFloat(this.editValor.replace(',', '.'));
+    const valor = this.parseMoney(this.editValor);
     if (!valor || valor <= 0) return;
     this.saving.set(true);
     const today = new Date().toISOString().split('T')[0];
@@ -62,5 +71,11 @@ export class ReceitaPage implements OnInit {
       },
       error: () => this.saving.set(false),
     });
+  }
+
+  private parseMoney(value: string): number | null {
+    const normalized = value.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
+    const amount = Number(normalized);
+    return Number.isFinite(amount) ? amount : null;
   }
 }

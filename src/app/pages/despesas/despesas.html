@@ -105,7 +105,7 @@
       <label class="form__label" for="valor">Valor do gasto</label>
       <div class="form__row">
         <span class="form__pre">R$</span>
-        <input id="valor" class="form__input form__input--bare" type="number" min="0" step="0.01" placeholder="0,00" [value]="formValor" (input)="formValor = $any($event.target).value" />
+        <input id="valor" class="form__input form__input--bare" type="text" inputmode="decimal" placeholder="0,00" [value]="formValor" (input)="formValor = $any($event.target).value" (blur)="formValor = formatMoneyInput(formValor)" />
       </div>
 
       <label class="form__label">Icone</label>

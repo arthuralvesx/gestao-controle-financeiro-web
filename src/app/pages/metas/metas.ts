@@ -48,6 +48,15 @@ export class MetasPage implements OnInit {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
   }
 
+  protected formatMoneyInput(value: string): string {
+    const amount = this.parseMoney(value);
+    if (amount === null) return '';
+    return new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  }
+
   protected progresso(m: Meta): number {
     if (!m.valorMeta || m.valorMeta <= 0) return 0;
     return Math.min(100, Math.round((m.valor / m.valorMeta) * 1000) / 10);
@@ -61,8 +70,8 @@ export class MetasPage implements OnInit {
   }
 
   protected adicionar() {
-    const valorMeta = parseFloat(this.formValorMeta.replace(',', '.'));
-    const valor = parseFloat(this.formValorInicial.replace(',', '.') || '0') || 0;
+    const valorMeta = this.parseMoney(this.formValorMeta);
+    const valor = this.parseMoney(this.formValorInicial) ?? 0;
     if (!valorMeta || valorMeta <= 0) return;
 
     this.saving.set(true);
@@ -86,7 +95,7 @@ export class MetasPage implements OnInit {
   }
 
   protected guardar(meta: Meta) {
-    const add = parseFloat(this.guardandoValor.replace(',', '.'));
+    const add = this.parseMoney(this.guardandoValor);
     if (!add || add <= 0) return;
     this.svc.atualizar(meta.id, meta.valorMeta, meta.valor + add, meta.metaCategoria).subscribe({
       next: () => {
@@ -94,6 +103,12 @@ export class MetasPage implements OnInit {
         this.guardandoId.set(null);
       },
     });
+  }
+
+  private parseMoney(value: string): number | null {
+    const normalized = value.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
+    const amount = Number(normalized);
+    return Number.isFinite(amount) ? amount : null;
   }
 
   protected getIcon(cat: string): string {

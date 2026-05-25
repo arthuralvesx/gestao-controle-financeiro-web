@@ -77,6 +77,15 @@ export class DespesasPage implements OnInit {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
   }
 
+  protected formatMoneyInput(value: string): string {
+    const amount = this.parseMoney(value);
+    if (amount === null) return '';
+    return new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  }
+
   protected openModal() {
     this.formNome = '';
     this.formValor = '';
@@ -85,7 +94,7 @@ export class DespesasPage implements OnInit {
   }
 
   protected registrar() {
-    const valor = parseFloat(this.formValor.replace(',', '.'));
+    const valor = this.parseMoney(this.formValor);
     if (!this.formNome.trim() || !valor || valor <= 0) return;
 
     this.saving.set(true);
@@ -99,6 +108,12 @@ export class DespesasPage implements OnInit {
       },
       error: () => this.saving.set(false),
     });
+  }
+
+  private parseMoney(value: string): number | null {
+    const normalized = value.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
+    const amount = Number(normalized);
+    return Number.isFinite(amount) ? amount : null;
   }
 
   protected excluir(id: number) {
