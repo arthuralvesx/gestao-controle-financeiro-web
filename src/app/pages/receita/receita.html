@@ -36,8 +36,7 @@
           inputmode="decimal"
           placeholder="0,00"
           [value]="editValor"
-          (input)="editValor = $any($event.target).value"
-          (blur)="editValor = formatMoneyInput(editValor)"
+          (input)="editValor = formatMoneyInput($any($event.target).value)"
         />
       </div>
       <div class="form__btns">

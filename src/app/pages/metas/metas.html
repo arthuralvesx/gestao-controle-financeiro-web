@@ -47,11 +47,11 @@
       <div class="form__2col">
         <div class="form__col">
           <label class="form__label" for="vm">Meta total (R$)</label>
-          <input id="vm" class="form__input" type="text" inputmode="decimal" placeholder="0,00" [value]="formValorMeta" (input)="formValorMeta = $any($event.target).value" (blur)="formValorMeta = formatMoneyInput(formValorMeta)" />
+          <input id="vm" class="form__input" type="text" inputmode="decimal" placeholder="0,00" [value]="formValorMeta" (input)="formValorMeta = formatMoneyInput($any($event.target).value)" />
         </div>
         <div class="form__col">
           <label class="form__label" for="vi">Valor inicial (R$)</label>
-          <input id="vi" class="form__input" type="text" inputmode="decimal" placeholder="0,00" [value]="formValorInicial" (input)="formValorInicial = $any($event.target).value" (blur)="formValorInicial = formatMoneyInput(formValorInicial)" />
+          <input id="vi" class="form__input" type="text" inputmode="decimal" placeholder="0,00" [value]="formValorInicial" (input)="formValorInicial = formatMoneyInput($any($event.target).value)" />
         </div>
       </div>
 
@@ -110,7 +110,7 @@
           <div class="guardar-form">
             <div class="g-row">
               <span class="g-pre">R$</span>
-              <input class="g-input" type="text" inputmode="decimal" placeholder="Valor a guardar" [value]="guardandoValor" (input)="guardandoValor = $any($event.target).value" (blur)="guardandoValor = formatMoneyInput(guardandoValor)" />
+              <input class="g-input" type="text" inputmode="decimal" placeholder="Valor a guardar" [value]="guardandoValor" (input)="guardandoValor = formatMoneyInput($any($event.target).value)" />
             </div>
             <div class="form__btns">
               <button class="btn-adicionar" (click)="guardar(m)">Confirmar</button>
