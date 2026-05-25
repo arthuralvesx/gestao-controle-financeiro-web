@@ -82,6 +82,33 @@ export class PainelPage implements OnInit {
     return ICON_BY_CATEGORY[key] ?? 'more';
   }
 
+  protected formatCategoryLabel(cat: string): string {
+    const normalized = cat.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const key = normalized.replace(/[^a-zA-Z]/g, '').toLowerCase();
+    const labels: Record<string, string> = {
+      alimentacao: 'Alimentação',
+      transporte: 'Transporte',
+      saude: 'Saúde',
+      lazer: 'Lazer',
+      educacao: 'Educação',
+      casa: 'Casa',
+      compras: 'Compras',
+      financas: 'Finanças',
+      viagem: 'Viagem',
+      tecnologia: 'Tecnologia',
+      energia: 'Energia',
+      cafe: 'Café',
+      musica: 'Música',
+      roupas: 'Roupas',
+      manutencao: 'Manutenção',
+      streaming: 'Streaming',
+      presente: 'Presente',
+      outros: 'Outros',
+    };
+
+    return labels[key] ?? cat;
+  }
+
   protected previousMonth(): void {
     this.viewDate.update((d) => this.addMonths(d, -1));
   }
@@ -122,7 +149,7 @@ export class PainelPage implements OnInit {
         this.isLoading.set(false);
       },
       error: () => {
-        this.errorMessage.set('Nao foi possivel carregar o painel. Verifique se a API esta ativa.');
+        this.errorMessage.set('Não foi possível carregar o painel. Verifique se a API está ativa.');
         this.isLoading.set(false);
       },
     });
@@ -155,7 +182,7 @@ export class PainelPage implements OnInit {
 
   private firstName(email: string): string {
     const name = email.split('@')[0]?.trim();
-    return name || 'usuario';
+    return name || 'usuário';
   }
 
   private buildDonutGradient(categorias: CategoriaResumo[]): string {

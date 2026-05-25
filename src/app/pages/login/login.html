@@ -13,7 +13,7 @@
         </svg>
       </div>
       <div class="brand__name">FFB</div>
-      <div class="brand__tag">Controle financeiro com dados persistentes</div>
+      <div class="brand__tag">Controle financeiro simples, seguro e organizado.</div>
     </div>
 
     <section class="card" aria-label="Acesso ao sistema">
@@ -28,7 +28,7 @@
 
       <form class="form" [formGroup]="form" (ngSubmit)="submit()">
         <label class="field">
-          <div class="field__label">Email</div>
+          <div class="field__label">E-mail</div>
           <input
             class="field__input"
             type="email"
@@ -38,7 +38,7 @@
             formControlName="email"
             aria-describedby="email-help"
           />
-          <span id="email-help" class="field__hint">Use o email cadastrado na sua conta.</span>
+          <span id="email-help" class="field__hint">Use o e-mail cadastrado na sua conta.</span>
         </label>
 
         <label class="field">
@@ -47,7 +47,7 @@
             class="field__input"
             type="password"
             autocomplete="current-password"
-            placeholder="Minimo 6 caracteres"
+            placeholder="Mínimo de 6 caracteres"
             formControlName="senha"
           />
         </label>
@@ -66,7 +66,7 @@
         </button>
 
         <button class="link-btn" type="button" (click)="toggleMode()">
-          {{ isRegisterMode() ? 'Ja tenho conta' : 'Ainda nao tenho conta' }}
+          {{ isRegisterMode() ? 'Já tenho conta' : 'Ainda não tenho conta' }}
         </button>
       </form>
     </section>

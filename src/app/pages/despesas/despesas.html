@@ -21,7 +21,7 @@
   </svg>
 
   <h1 class="page__title">Registro de gastos</h1>
-  <p class="page__sub">Acompanhe seus gastos do mes</p>
+  <p class="page__sub">Acompanhe suas despesas do mês.</p>
 
   <div class="summary">
     <div class="summary__col">
@@ -59,10 +59,10 @@
       }
     </ul>
 
-    <nav class="pagination" aria-label="Paginacao de despesas">
+    <nav class="pagination" aria-label="Paginação de despesas">
       <span class="pagination__info">{{ pageStart() }}-{{ pageEnd() }} de {{ despesas().length }}</span>
       <div class="pagination__controls">
-        <button type="button" class="pagination__btn" (click)="previousPage()" [disabled]="page() === 1" aria-label="Pagina anterior">
+        <button type="button" class="pagination__btn" (click)="previousPage()" [disabled]="page() === 1" aria-label="Página anterior">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6 9 12l6 6" /></svg>
         </button>
         @for (p of pageNumbers(); track p) {
@@ -70,7 +70,7 @@
             {{ p }}
           </button>
         }
-        <button type="button" class="pagination__btn" (click)="nextPage()" [disabled]="page() === totalPages()" aria-label="Proxima pagina">
+        <button type="button" class="pagination__btn" (click)="nextPage()" [disabled]="page() === totalPages()" aria-label="Próxima página">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
         </button>
       </div>
@@ -108,7 +108,7 @@
         <input id="valor" class="form__input form__input--bare" type="text" inputmode="decimal" placeholder="0,00" [value]="formValor" (input)="formValor = formatMoneyInput($any($event.target).value, formValor)" />
       </div>
 
-      <label class="form__label">Icone</label>
+      <label class="form__label">Ícone</label>
       <div class="cat-grid">
         @for (cat of categorias; track cat.id) {
           <button class="cat-btn" [class.cat-btn--active]="formCategoria === cat.id" (click)="setCategoria(cat.id)" type="button">

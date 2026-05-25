@@ -37,7 +37,7 @@ export class LoginPage {
 
     this.form.markAllAsTouched();
     if (this.form.invalid) {
-      this.errorMessage.set('Informe um email valido e uma senha com pelo menos 6 caracteres.');
+      this.errorMessage.set('Informe um e-mail válido e uma senha com pelo menos 6 caracteres.');
       return;
     }
 
@@ -53,11 +53,11 @@ export class LoginPage {
         )
         .subscribe({
           next: () => {
-            this.successMessage.set('Conta criada. Agora voce ja pode entrar.');
+            this.successMessage.set('Conta criada com sucesso. Agora você já pode entrar.');
             this.isRegisterMode.set(false);
           },
           error: (err) => {
-            this.errorMessage.set(err?.status === 409 ? 'Este email ja esta cadastrado.' : 'Nao foi possivel criar a conta.');
+            this.errorMessage.set(err?.status === 409 ? 'Este e-mail já está cadastrado.' : 'Não foi possível criar a conta.');
           }
         });
       return;
@@ -72,7 +72,7 @@ export class LoginPage {
       .subscribe({
         next: (res) => {
           if (!res.autenticado) {
-            this.errorMessage.set(res.mensagem || 'Email ou senha invalidos.');
+            this.errorMessage.set(res.mensagem || 'E-mail ou senha inválidos.');
             return;
           }
           sessionStorage.setItem('userEmail', res.email ?? payload.email);
@@ -82,7 +82,7 @@ export class LoginPage {
           void this.router.navigateByUrl('/painel');
         },
         error: () => {
-          this.errorMessage.set('Nao foi possivel validar o login. Verifique se a API esta ativa.');
+          this.errorMessage.set('Não foi possível validar o login. Verifique se a API está ativa.');
         }
       });
   }

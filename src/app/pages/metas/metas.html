@@ -13,7 +13,7 @@
     <div>
       <h1 class="page__title">Metas de economia</h1>
       <p class="page__disp">
-        Disponivel:
+        Disponível:
         <span [class.pos]="disponivel() >= 0" [class.neg]="disponivel() < 0">
           {{ formatBrl(disponivel()) }}
         </span>
@@ -65,7 +65,7 @@
   }
 
   @if (metas().length === 0 && !showForm()) {
-    <p class="empty" role="status">Nenhuma meta criada ainda. Comece definindo para onde seu dinheiro vai.</p>
+    <p class="empty" role="status">Nenhuma meta criada ainda. Comece definindo o destino do seu dinheiro.</p>
   }
 
   <div class="metas-list">
@@ -78,7 +78,7 @@
             </svg>
           </div>
           <div class="meta-card__info">
-            <span class="meta-card__name">{{ m.metaCategoria }}</span>
+            <span class="meta-card__name">{{ formatMetaLabel(m.metaCategoria) }}</span>
             <span class="meta-card__goal">Meta: {{ formatBrl(m.valorMeta) }}</span>
           </div>
           <button class="meta-card__del" (click)="excluir(m.id)" [attr.aria-label]="'Excluir meta ' + m.metaCategoria">

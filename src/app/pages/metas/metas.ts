@@ -6,10 +6,10 @@ import { Meta, MetasService } from './metas.service';
 
 const META_CATEGORIAS = [
   { id: 'Viagem', label: 'Viagem', icon: 'plane' },
-  { id: 'Casa propria', label: 'Casa propria', icon: 'home' },
+  { id: 'Casa propria', label: 'Casa própria', icon: 'home' },
   { id: 'Carro', label: 'Carro', icon: 'car' },
   { id: 'Investimento', label: 'Investimento', icon: 'trend' },
-  { id: 'Educacao', label: 'Educacao', icon: 'book' },
+  { id: 'Educacao', label: 'Educação', icon: 'book' },
   { id: 'Presente', label: 'Presente', icon: 'gift' },
 ];
 
@@ -132,6 +132,19 @@ export class MetasPage implements OnInit {
 
   protected getIcon(cat: string): string {
     return ICON_BY_META.get(this.normalizeCategory(cat)) ?? 'target';
+  }
+
+  protected formatMetaLabel(cat: string): string {
+    const labels: Record<string, string> = {
+      Viagem: 'Viagem',
+      'Casa propria': 'Casa própria',
+      Carro: 'Carro',
+      Investimento: 'Investimento',
+      Educacao: 'Educação',
+      Presente: 'Presente',
+    };
+
+    return labels[this.normalizeCategory(cat)] ?? cat;
   }
 
   protected setCategoria(id: string) {
