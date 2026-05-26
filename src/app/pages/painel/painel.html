@@ -84,6 +84,21 @@
         </div>
       </article>
 
+      <article class="stat">
+        <div class="stat__icon stat__icon--reserve" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 21s-7-4.4-7-10a7 7 0 0 1 14 0c0 5.6-7 10-7 10Z" />
+            <path d="M9 11h6" />
+            <path d="M12 8v6" />
+          </svg>
+        </div>
+        <div class="stat__meta">
+          <div class="stat__label">Guardado em metas</div>
+          <div class="stat__value">{{ formatBrl(guardadoMetas()) }}</div>
+          <div class="stat__hint">{{ guardadoPercentReceita() | number: '1.0-0' }}% da receita</div>
+        </div>
+      </article>
+
       <article class="stat stat--balance">
         <div class="stat__icon stat__icon--balance" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -98,6 +113,22 @@
         </div>
       </article>
     </div>
+
+    <div class="formula" aria-label="Fórmula do saldo disponível">
+      <span>{{ formatBrl(receitas()) }}</span>
+      <small>-</small>
+      <span>{{ formatBrl(despesas()) }}</span>
+      <small>-</small>
+      <span>{{ formatBrl(guardadoMetas()) }}</span>
+      <small>=</small>
+      <strong>{{ formatBrl(disponivel()) }}</strong>
+    </div>
+
+    <section class="quick-actions" aria-label="Ações rápidas">
+      <a routerLink="/despesas">Adicionar despesa rápida</a>
+      <a routerLink="/metas">Guardar dinheiro</a>
+      <a routerLink="/receita">Editar receita</a>
+    </section>
 
     <section class="painel__insight" aria-labelledby="historico-title">
       <div class="painel__section-head">

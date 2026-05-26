@@ -8,6 +8,15 @@ export interface Meta {
   metaCategoria: string;
 }
 
+export interface MovimentacaoMeta {
+  id: number;
+  metaId: number;
+  tipo: 'ENTRADA' | 'SAIDA';
+  valor: number;
+  data: string;
+  descricao: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class MetasService {
   private readonly http = inject(HttpClient);
@@ -19,6 +28,15 @@ export class MetasService {
   }
   atualizar(id: number, valorMeta: number, valor: number, metaCategoria: string) {
     return this.http.put<Meta>(`${this.base}/${id}`, { valorMeta, valor, metaCategoria });
+  }
+  guardar(id: number, valor: number, descricao = 'Dinheiro guardado') {
+    return this.http.post<Meta>(`${this.base}/${id}/entradas`, { valor, descricao });
+  }
+  retirar(id: number, valor: number, descricao = 'Dinheiro retirado') {
+    return this.http.post<Meta>(`${this.base}/${id}/saidas`, { valor, descricao });
+  }
+  movimentacoes(id: number) {
+    return this.http.get<MovimentacaoMeta[]>(`${this.base}/${id}/movimentacoes`);
   }
   excluir(id: number) { return this.http.delete<void>(`${this.base}/${id}`); }
 }

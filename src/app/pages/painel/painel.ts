@@ -46,7 +46,8 @@ export class PainelPage implements OnInit {
   protected readonly selectedMonth = computed(() => this.findMonth(this.selectedMonthKey()));
   protected readonly receitas = computed(() => this.selectedMonth()?.receitas ?? 0);
   protected readonly despesas = computed(() => this.selectedMonth()?.despesas ?? 0);
-  protected readonly disponivel = computed(() => this.selectedMonth()?.saldo ?? 0);
+  protected readonly guardadoMetas = computed(() => this.selectedMonth()?.guardadoMetas ?? this.dashboard()?.totalGuardadoMetas ?? 0);
+  protected readonly disponivel = computed(() => this.selectedMonth()?.saldo ?? this.dashboard()?.saldoTotal ?? 0);
   protected readonly monthTitle = computed(() => this.formatMonthTitle(this.viewDate()));
   protected readonly isCurrentMonth = computed(() => this.isSameMonth(this.viewDate(), new Date()));
   protected readonly despesasPorCat = computed(() => this.selectedMonth()?.categorias ?? []);
@@ -65,6 +66,11 @@ export class PainelPage implements OnInit {
     const r = this.receitas();
     if (r <= 0) return 0;
     return Math.min(100, Math.round((this.despesas() / r) * 1000) / 10);
+  });
+  protected readonly guardadoPercentReceita = computed(() => {
+    const r = this.receitas();
+    if (r <= 0) return 0;
+    return Math.min(100, Math.round((this.guardadoMetas() / r) * 1000) / 10);
   });
 
   ngOnInit() {

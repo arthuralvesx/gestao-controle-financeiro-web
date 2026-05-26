@@ -1,0 +1,20 @@
+@use '../styles/tokens' as t;
+
+.skeleton-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.skeleton {
+  height: 4.5rem;
+  border-radius: t.$radius-lg;
+  background: linear-gradient(90deg, t.$bg-card 0%, rgba(255, 255, 255, 0.08) 45%, t.$bg-card 90%);
+  background-size: 220% 100%;
+  border: 1px solid t.$border-subtle;
+  animation: shimmer 1.2s infinite linear;
+}
+
+@keyframes shimmer {
+  from { background-position: 120% 0; }
+  to { background-position: -120% 0; }
+}

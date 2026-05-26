@@ -137,7 +137,7 @@
 
 .painel__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -184,6 +184,12 @@
   border: 1px solid rgba(248, 113, 113, 0.22);
 }
 
+.stat__icon--reserve {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.22);
+}
+
 .stat__icon--balance {
   color: t.$emerald;
   background: t.$emerald-glow;
@@ -218,6 +224,53 @@
   margin-top: 0.2rem;
   font-size: 0.75rem;
   color: t.$text-faint;
+}
+
+.formula {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  padding: 0.85rem 1rem;
+  border-radius: t.$radius-lg;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid t.$border-subtle;
+  color: t.$text-muted;
+  font-size: 0.9rem;
+}
+
+.formula strong {
+  color: t.$emerald;
+}
+
+.formula small {
+  color: t.$text-faint;
+  font-weight: 800;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.quick-actions a {
+  min-height: 2.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: t.$radius-pill;
+  background: t.$bg-card;
+  border: 1px solid t.$border-subtle;
+  color: t.$text-primary;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.quick-actions a:hover {
+  border-color: t.$border-emerald;
 }
 
 .painel__section {
@@ -523,7 +576,7 @@
 
 @media (max-width: 900px) {
   .painel__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .charts,
@@ -533,5 +586,12 @@
 
   .donut {
     justify-self: center;
+  }
+}
+
+@media (max-width: 620px) {
+  .painel__grid,
+  .quick-actions {
+    grid-template-columns: 1fr;
   }
 }

@@ -28,19 +28,22 @@
     <div class="card card--form">
       <label class="form__label" for="v">Valor da receita mensal (R$)</label>
       <div class="form__row">
-        <span class="form__pre">R$</span>
         <input
           id="v"
           class="form__input"
           type="text"
-          inputmode="decimal"
-          placeholder="0,00"
-          [value]="editValor"
-          (input)="editValor = formatMoneyInput($any($event.target).value, editValor)"
+          inputmode="numeric"
+          placeholder="R$ 0,00"
+          appBrlCurrency
+          [(ngModel)]="editValor"
+          [attr.aria-invalid]="valorError ? 'true' : null"
         />
       </div>
+      @if (valorError) {
+        <div class="field-error" role="alert">{{ valorError }}</div>
+      }
       <div class="form__btns">
-        <button class="btn-primary btn-primary--flex" (click)="save()" [disabled]="saving()">
+        <button class="btn-primary btn-primary--flex" (click)="save()" [disabled]="saving() || !editValor || editValor <= 0">
           {{ saving() ? 'Salvando…' : 'Salvar' }}
         </button>
         <button class="btn-ghost" (click)="showForm.set(false)">Cancelar</button>

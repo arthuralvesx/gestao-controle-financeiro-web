@@ -11,6 +11,7 @@ export interface MesResumo {
   mes: string;
   receitas: number;
   despesas: number;
+  guardadoMetas: number;
   saldo: number;
   categorias: CategoriaResumo[];
 }
@@ -18,6 +19,7 @@ export interface MesResumo {
 export interface DashboardResumo {
   totalReceitas: number;
   totalDespesas: number;
+  totalGuardadoMetas: number;
   saldoTotal: number;
   mesMaisGasto: MesResumo | null;
   meses: MesResumo[];

@@ -1,7 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
-import { ReceitaService } from '../receita/receita.service';
+import { BrlCurrencyDirective } from '../../shared/directives/brl-currency.directive';
+import { ConfirmDialogComponent } from '../../shared/ux/confirm-dialog.component';
+import { EmptyStateComponent } from '../../shared/ux/empty-state.component';
+import { LoadingSkeletonComponent } from '../../shared/ux/loading-skeleton.component';
+import { ToastService } from '../../shared/ux/toast.service';
+import { DashboardService } from '../painel/dashboard.service';
 import { Despesa, DespesaService } from './despesas.service';
 
 const CATEGORIAS = [
@@ -30,40 +36,54 @@ const PAGE_SIZE = 7;
 
 @Component({
   selector: 'app-despesas-page',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, BrlCurrencyDirective, ConfirmDialogComponent, EmptyStateComponent, LoadingSkeletonComponent],
   templateUrl: './despesas.html',
   styleUrl: './despesas.scss',
 })
 export class DespesasPage implements OnInit {
   private readonly svc = inject(DespesaService);
-  private readonly receitaSvc = inject(ReceitaService);
+  private readonly dashboardSvc = inject(DashboardService);
+  private readonly toast = inject(ToastService);
 
   protected readonly categorias = CATEGORIAS;
   protected readonly despesas = signal<Despesa[]>([]);
-  protected readonly receitaTotal = signal(0);
+  protected readonly disponivelTotal = signal(0);
   protected readonly showModal = signal(false);
   protected readonly saving = signal(false);
+  protected readonly loading = signal(false);
   protected readonly page = signal(1);
+  protected readonly confirmingDelete = signal<Despesa | null>(null);
+  protected readonly editingDespesa = signal<Despesa | null>(null);
+  protected searchTerm = '';
   protected formNome = '';
-  protected formValor = '';
+  protected formValor: number | null = null;
   protected formCategoria = 'Outros';
+  protected nomeError = '';
+  protected valorError = '';
 
   protected readonly totalGasto = computed(() =>
     this.despesas().reduce((s, d) => s + d.valor, 0),
   );
-  protected readonly sobra = computed(() => this.receitaTotal() - this.totalGasto());
+  protected readonly sobra = computed(() => this.disponivelTotal());
+  protected readonly filteredDespesas = computed(() => {
+    const term = this.searchTerm.trim().toLowerCase();
+    if (!term) return this.despesas();
+    return this.despesas().filter((d) =>
+      d.nome.toLowerCase().includes(term) || this.formatCategoryLabel(d.categoria).toLowerCase().includes(term),
+    );
+  });
   protected readonly totalPages = computed(() =>
-    Math.max(1, Math.ceil(this.despesas().length / PAGE_SIZE)),
+    Math.max(1, Math.ceil(this.filteredDespesas().length / PAGE_SIZE)),
   );
   protected readonly paginatedDespesas = computed(() => {
     const start = (this.page() - 1) * PAGE_SIZE;
-    return this.despesas().slice(start, start + PAGE_SIZE);
+    return this.filteredDespesas().slice(start, start + PAGE_SIZE);
   });
   protected readonly pageStart = computed(() =>
-    this.despesas().length === 0 ? 0 : (this.page() - 1) * PAGE_SIZE + 1,
+    this.filteredDespesas().length === 0 ? 0 : (this.page() - 1) * PAGE_SIZE + 1,
   );
   protected readonly pageEnd = computed(() =>
-    Math.min(this.page() * PAGE_SIZE, this.despesas().length),
+    Math.min(this.page() * PAGE_SIZE, this.filteredDespesas().length),
   );
   protected readonly pageNumbers = computed(() =>
     Array.from({ length: this.totalPages() }, (_, index) => index + 1),
@@ -77,66 +97,75 @@ export class DespesasPage implements OnInit {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
   }
 
-  protected formatMoneyInput(value: string, previous = ''): string {
-    const normalizedInput = this.normalizeCurrencyTyping(value, previous);
-    const hasDecimal = normalizedInput.includes(',');
-    const onlyDigits = normalizedInput.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
-
-    if (!onlyDigits) return '';
-
-    if (hasDecimal) {
-      const [integerPart, decimalPart = ''] = normalizedInput.split(',');
-      const integerDigits = integerPart.replace(/\D/g, '').replace(/^0+(?=\d)/, '') || '0';
-      return `${this.groupThousands(integerDigits)},${decimalPart.replace(/\D/g, '').padEnd(2, '0').slice(0, 2)}`;
-    }
-
-    const integerValue = this.groupThousands(onlyDigits);
-    return onlyDigits.length >= 4 ? `${integerValue},00` : integerValue;
+  protected openModal() {
+    this.editingDespesa.set(null);
+    this.formNome = '';
+    this.formValor = null;
+    this.formCategoria = 'Outros';
+    this.clearErrors();
+    this.showModal.set(true);
   }
 
-  protected openModal() {
-    this.formNome = '';
-    this.formValor = '';
-    this.formCategoria = 'Outros';
+  protected openEdit(despesa: Despesa) {
+    this.editingDespesa.set(despesa);
+    this.formNome = despesa.nome;
+    this.formValor = despesa.valor;
+    this.formCategoria = this.normalizeCategory(despesa.categoria);
+    this.clearErrors();
     this.showModal.set(true);
   }
 
   protected registrar() {
-    const valor = this.parseMoney(this.formValor);
-    if (!this.formNome.trim() || !valor || valor <= 0) return;
+    const valor = this.formValor;
+    if (!this.validateForm()) return;
 
     this.saving.set(true);
     const today = new Date().toISOString().split('T')[0];
-    this.svc.incluir(this.formNome.trim(), valor, today, this.formCategoria).subscribe({
+    const editing = this.editingDespesa();
+    const request = editing
+      ? this.svc.atualizar(editing.id, this.formNome.trim(), valor!, editing.data ?? today, this.formCategoria)
+      : this.svc.incluir(this.formNome.trim(), valor!, today, this.formCategoria);
+
+    request.subscribe({
       next: () => {
         this.showModal.set(false);
         this.saving.set(false);
         this.page.set(1);
         this.load();
+        this.toast.success(editing ? 'Despesa atualizada com sucesso.' : 'Despesa registrada com sucesso.');
       },
-      error: () => this.saving.set(false),
+      error: (err) => {
+        this.toast.fromApiError(err, 'Não foi possível salvar a despesa.');
+        this.saving.set(false);
+      },
     });
   }
 
-  private parseMoney(value: string): number | null {
-    const normalized = value.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
-    const amount = Number(normalized);
-    return Number.isFinite(amount) ? amount : null;
-  }
-
-  private normalizeCurrencyTyping(value: string, previous: string): string {
-    if (previous.endsWith(',00') && value.startsWith(previous) && value.length > previous.length) {
-      return `${previous.slice(0, -3)}${value.slice(previous.length)}`;
-    }
-    return value;
-  }
-
-  private groupThousands(value: string): string {
-    return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  }
-
   protected excluir(id: number) {
-    this.svc.excluir(id).subscribe(() => this.load());
+    const despesa = this.despesas().find((d) => d.id === id) ?? null;
+    this.confirmingDelete.set(despesa);
+  }
+
+  protected confirmDelete() {
+    const despesa = this.confirmingDelete();
+    if (!despesa) return;
+
+    this.svc.excluir(despesa.id).subscribe({
+      next: () => {
+        this.confirmingDelete.set(null);
+        this.load();
+        this.toast.success('Despesa excluída.', {
+          label: 'DESFAZER',
+          handler: () => {
+            this.svc.incluir(despesa.nome, despesa.valor, despesa.data, despesa.categoria).subscribe(() => {
+              this.load();
+              this.toast.success('Despesa restaurada.');
+            });
+          },
+        });
+      },
+      error: (err) => this.toast.fromApiError(err, 'Não foi possível excluir a despesa.'),
+    });
   }
 
   protected previousPage(): void {
@@ -160,18 +189,17 @@ export class DespesasPage implements OnInit {
   }
 
   private load() {
+    this.loading.set(true);
     const now = new Date();
     forkJoin({
       despesas: this.svc.listAll(),
-      receitas: this.receitaSvc.listAll(),
-    }).subscribe(({ despesas, receitas }) => {
+      dashboard: this.dashboardSvc.resumo(),
+    }).subscribe(({ despesas, dashboard }) => {
       this.despesas.set(despesas);
       this.normalizePage();
-      const rec = receitas.find((r) => {
-        const d = new Date(r.data + 'T00:00:00');
-        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
-      });
-      this.receitaTotal.set(rec?.valor ?? 0);
+      const key = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      this.disponivelTotal.set(dashboard.meses.find((mes) => mes.mes === key)?.saldo ?? dashboard.saldoTotal);
+      this.loading.set(false);
     });
   }
 
@@ -210,5 +238,29 @@ export class DespesasPage implements OnInit {
     };
 
     return aliases[key] ?? 'Outros';
+  }
+
+  protected formatCategoryLabel(cat: string): string {
+    return CATEGORIAS.find((c) => c.id === this.normalizeCategory(cat))?.label ?? cat;
+  }
+
+  protected isFormInvalid(): boolean {
+    return !this.formNome.trim() || !this.formValor || this.formValor <= 0;
+  }
+
+  private validateForm(): boolean {
+    this.clearErrors();
+    if (!this.formNome.trim()) {
+      this.nomeError = 'Informe o nome da despesa.';
+    }
+    if (!this.formValor || this.formValor <= 0) {
+      this.valorError = 'Informe um valor maior que zero.';
+    }
+    return !this.nomeError && !this.valorError;
+  }
+
+  private clearErrors() {
+    this.nomeError = '';
+    this.valorError = '';
   }
 }

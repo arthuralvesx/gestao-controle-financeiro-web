@@ -18,5 +18,8 @@ export class DespesaService {
   incluir(nome: string, valor: number, data: string, categoria: string) {
     return this.http.post<Despesa>(this.base, { nome, valor, data, categoria });
   }
+  atualizar(id: number, nome: string, valor: number, data: string, categoria: string) {
+    return this.http.put<Despesa>(`${this.base}/${id}`, { nome, valor, data, categoria });
+  }
   excluir(id: number) { return this.http.delete<void>(`${this.base}/${id}`); }
 }

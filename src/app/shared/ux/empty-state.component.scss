@@ -1,0 +1,23 @@
+@use '../styles/tokens' as t;
+
+.empty {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.4rem;
+  border-radius: t.$radius-lg;
+  background: t.$bg-card;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  color: t.$text-muted;
+  text-align: center;
+}
+
+strong {
+  color: t.$text-primary;
+  font-size: 0.98rem;
+}
+
+p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}

@@ -1,0 +1,28 @@
+@use '../styles/tokens' as t;
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+h1 {
+  margin: 0 0 0.25rem;
+  color: t.$text-primary;
+  font-size: 1.5rem;
+  font-weight: 750;
+}
+
+p {
+  margin: 0;
+  color: t.$text-muted;
+  font-size: 0.92rem;
+}
+
+@media (max-width: 620px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

@@ -28,9 +28,13 @@
     </button>
   </div>
 
+  @if (errorMessage()) {
+    <div class="form-error" role="alert">{{ errorMessage() }}</div>
+  }
+
   @if (showForm()) {
     <div class="form-card">
-      <h2 class="form-card__title">Nova meta</h2>
+      <h2 class="form-card__title">{{ editingMeta() ? 'Editar meta' : 'Nova meta' }}</h2>
 
       <span class="form__label">Tema</span>
       <div class="tema-grid">
@@ -47,17 +51,42 @@
       <div class="form__2col">
         <div class="form__col">
           <label class="form__label" for="vm">Meta total (R$)</label>
-          <input id="vm" class="form__input" type="text" inputmode="decimal" placeholder="0,00" [value]="formValorMeta" (input)="formValorMeta = formatMoneyInput($any($event.target).value, formValorMeta)" />
+          <input
+            id="vm"
+            class="form__input"
+            type="text"
+            inputmode="numeric"
+            placeholder="R$ 0,00"
+            appBrlCurrency
+            [(ngModel)]="formValorMeta"
+            [attr.aria-invalid]="valorMetaError ? 'true' : null"
+          />
+          @if (valorMetaError) {
+            <div class="field-error" role="alert">{{ valorMetaError }}</div>
+          }
         </div>
         <div class="form__col">
-          <label class="form__label" for="vi">Valor inicial (R$)</label>
-          <input id="vi" class="form__input" type="text" inputmode="decimal" placeholder="0,00" [value]="formValorInicial" (input)="formValorInicial = formatMoneyInput($any($event.target).value, formValorInicial)" />
+          <label class="form__label" for="vi">{{ editingMeta() ? 'Valor guardado atual' : 'Valor inicial (R$)' }}</label>
+          <input
+            id="vi"
+            class="form__input"
+            type="text"
+            inputmode="numeric"
+            placeholder="R$ 0,00"
+            appBrlCurrency
+            [(ngModel)]="formValorInicial"
+            [disabled]="!!editingMeta()"
+            [attr.aria-invalid]="valorInicialError ? 'true' : null"
+          />
+          @if (valorInicialError) {
+            <div class="field-error" role="alert">{{ valorInicialError }}</div>
+          }
         </div>
       </div>
 
       <div class="form__btns">
-        <button class="btn-adicionar" (click)="adicionar()" [disabled]="saving()">
-          {{ saving() ? 'Adicionando...' : 'Adicionar' }}
+        <button class="btn-adicionar" (click)="adicionar()" [disabled]="saving() || isFormInvalid()">
+          {{ saving() ? 'Salvando...' : (editingMeta() ? 'Salvar alterações' : 'Adicionar') }}
         </button>
         <button class="btn-cancelar" (click)="showForm.set(false)">Cancelar</button>
       </div>
@@ -65,7 +94,14 @@
   }
 
   @if (metas().length === 0 && !showForm()) {
-    <p class="empty" role="status">Nenhuma meta criada ainda. Comece definindo o destino do seu dinheiro.</p>
+    <app-empty-state
+      title="Nenhuma meta criada ainda."
+      text="Comece definindo o destino do seu dinheiro e transforme metas em reserva real."
+    />
+  }
+
+  @if (loading()) {
+    <app-loading-skeleton [rows]="3" />
   }
 
   <div class="metas-list">
@@ -81,6 +117,12 @@
             <span class="meta-card__name">{{ formatMetaLabel(m.metaCategoria) }}</span>
             <span class="meta-card__goal">Meta: {{ formatBrl(m.valorMeta) }}</span>
           </div>
+          <button class="meta-card__del" (click)="openEdit(m)" [attr.aria-label]="'Editar meta ' + m.metaCategoria">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+            </svg>
+          </button>
           <button class="meta-card__del" (click)="excluir(m.id)" [attr.aria-label]="'Excluir meta ' + m.metaCategoria">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <line x1="18" y1="6" x2="6" y2="18"/>
@@ -95,30 +137,87 @@
           </div>
           <div class="progress-info">
             <span>{{ formatBrl(m.valor) }} guardado</span>
+            <span>Faltam {{ formatBrl(restante(m)) }}</span>
             <span>{{ progresso(m) | number: '1.0-1' }}%</span>
           </div>
         </div>
 
         @if (guardandoId() !== m.id) {
-          <button class="btn-guardar" (click)="openGuardar(m.id)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-            </svg>
-            Guardar dinheiro
-          </button>
+          <div class="meta-actions">
+            <button class="btn-guardar" (click)="openGuardar(m.id)">Guardar dinheiro</button>
+            <button class="btn-sec" (click)="openRetirar(m.id)" [disabled]="m.valor <= 0">Retirar</button>
+            <button class="btn-sec" (click)="loadHistorico(m)">Histórico</button>
+          </div>
         } @else {
           <div class="guardar-form">
             <div class="g-row">
-              <span class="g-pre">R$</span>
-              <input class="g-input" type="text" inputmode="decimal" placeholder="Valor a guardar" [value]="guardandoValor" (input)="guardandoValor = formatMoneyInput($any($event.target).value, guardandoValor)" />
+              <input
+                class="g-input"
+                type="text"
+                inputmode="numeric"
+                placeholder="R$ 0,00"
+                appBrlCurrency
+                [(ngModel)]="guardandoValor"
+              />
             </div>
+            @if (movimentoError) {
+              <div class="field-error" role="alert">{{ movimentoError }}</div>
+            }
             <div class="form__btns">
-              <button class="btn-adicionar" (click)="guardar(m)">Confirmar</button>
+              <button class="btn-adicionar" (click)="guardar(m)" [disabled]="!guardandoValor || guardandoValor <= 0">Confirmar</button>
               <button class="btn-cancelar" (click)="guardandoId.set(null)">Cancelar</button>
             </div>
+          </div>
+        }
+
+        @if (retirandoId() === m.id) {
+          <div class="guardar-form">
+            <div class="g-row">
+              <input
+                class="g-input"
+                type="text"
+                inputmode="numeric"
+                placeholder="R$ 0,00"
+                appBrlCurrency
+                [(ngModel)]="retirandoValor"
+              />
+            </div>
+            @if (movimentoError) {
+              <div class="field-error" role="alert">{{ movimentoError }}</div>
+            }
+            <div class="form__btns">
+              <button class="btn-adicionar" (click)="retirar(m)" [disabled]="!retirandoValor || retirandoValor <= 0">Confirmar saída</button>
+              <button class="btn-cancelar" (click)="retirandoId.set(null)">Cancelar</button>
+            </div>
+          </div>
+        }
+
+        @if (historicoId() === m.id) {
+          <div class="history">
+            @if (movimentacoes().length === 0) {
+              <span>Nenhuma movimentação registrada.</span>
+            } @else {
+              @for (mov of movimentacoes(); track mov.id) {
+                <div class="history__item">
+                  <span>{{ mov.tipo === 'ENTRADA' ? 'Entrada' : 'Saída' }}</span>
+                  <strong>{{ formatBrl(mov.valor) }}</strong>
+                  <small>{{ mov.data }}</small>
+                </div>
+              }
+            }
           </div>
         }
       </div>
     }
   </div>
 </section>
+
+<app-confirm-dialog
+  [open]="!!confirmingDelete()"
+  title="Excluir meta?"
+  [message]="'Excluir esta meta devolverá ' + formatBrl(confirmingDelete()?.valor ?? 0) + ' ao saldo disponível.'"
+  detail="O histórico da meta também deixará de aparecer nesta tela."
+  confirmLabel="Excluir meta"
+  (confirm)="confirmDelete()"
+  (cancel)="confirmingDelete.set(null)"
+/>

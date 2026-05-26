@@ -159,14 +159,48 @@
 }
 
 @media (max-width: 600px) {
+  .shell {
+    padding-bottom: 4.5rem;
+  }
+
+  .shell__header {
+    position: static;
+  }
+
   .shell__nav {
-    order: 3;
-    width: 100%;
-    justify-content: flex-start;
+    position: fixed;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    z-index: 30;
+    order: initial;
+    width: auto;
+    justify-content: space-around;
+    padding: 0.45rem;
+    border-radius: 18px;
+    background: rgba(17, 17, 17, 0.96);
+    border: 1px solid t.$border-subtle;
+    box-shadow: t.$shadow-card;
+    flex-wrap: nowrap;
   }
 
   .shell__user {
     order: 2;
     width: auto;
+  }
+
+  .shell__nav-item {
+    flex: 1;
+    min-height: 3rem;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.35rem 0.2rem;
+    font-size: 0.68rem;
+  }
+
+  .shell__nav-icon {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 }

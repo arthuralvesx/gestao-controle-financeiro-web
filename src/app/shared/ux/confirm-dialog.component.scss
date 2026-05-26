@@ -1,0 +1,71 @@
+@use '../styles/tokens' as t;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.dialog {
+  width: min(430px, 100%);
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.25rem;
+  border-radius: t.$radius-lg;
+  background: t.$bg-elevated;
+  border: 1px solid t.$border-subtle;
+  box-shadow: t.$shadow-card;
+}
+
+h2 {
+  margin: 0;
+  color: t.$text-primary;
+  font-size: 1.05rem;
+}
+
+p {
+  margin: 0;
+  color: t.$text-muted;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.dialog__detail {
+  padding: 0.75rem;
+  border-radius: 10px;
+  color: t.$text-primary;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid t.$border-subtle;
+  font-size: 0.86rem;
+}
+
+.dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.btn {
+  min-height: 2.5rem;
+  border-radius: t.$radius-pill;
+  padding: 0 1rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn--secondary {
+  color: t.$text-muted;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid t.$border-subtle;
+}
+
+.btn--danger {
+  color: #160303;
+  background: t.$red-expense;
+  border: 1px solid t.$red-expense;
+}
