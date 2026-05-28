@@ -26,7 +26,7 @@ export interface DashboardResumo {
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
   private readonly http = inject(HttpClient);
-  private readonly base = 'http://localhost:8080/api/dashboard';
+  private readonly base = 'https://gestao-controle-financeiro-api-production.up.railway.app/api/dashboard';
 
   resumo() {
     return this.http.get<DashboardResumo>(this.base);

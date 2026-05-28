@@ -17,7 +17,7 @@ export type AuthResponse = {
 export class LoginService {
   private readonly http = inject(HttpClient);
 
-  private readonly baseUrl = 'http://localhost:8080';
+  private readonly baseUrl = 'https://gestao-controle-financeiro-api-production.up.railway.app';
 
   login(payload: LoginRequest) {
     return this.http.post<AuthResponse>(`${this.baseUrl}/api/usuario/login`, payload);

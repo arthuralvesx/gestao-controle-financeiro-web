@@ -10,7 +10,7 @@ export interface Receita {
 @Injectable({ providedIn: 'root' })
 export class ReceitaService {
   private readonly http = inject(HttpClient);
-  private readonly base = 'http://localhost:8080/api/receita';
+  private readonly base = 'https://gestao-controle-financeiro-api-production.up.railway.app/api/receita';
 
   listAll() { return this.http.get<Receita[]>(this.base); }
   incluir(data: string, valor: number) { return this.http.post<Receita>(this.base, { data, valor }); }

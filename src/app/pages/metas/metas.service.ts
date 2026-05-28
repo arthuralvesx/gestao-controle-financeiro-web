@@ -11,7 +11,7 @@ export interface Meta {
 @Injectable({ providedIn: 'root' })
 export class MetasService {
   private readonly http = inject(HttpClient);
-  private readonly base = 'http://localhost:8080/api/metas';
+  private readonly base = 'https://gestao-controle-financeiro-api-production.up.railway.app/api/metas';
 
   listAll() { return this.http.get<Meta[]>(this.base); }
   incluir(valorMeta: number, valor: number, metaCategoria: string) {
