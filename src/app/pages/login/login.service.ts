@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { API_BASE_URL } from '../../core/api-url';
 
 export type LoginRequest = {
   email: string;
@@ -17,7 +18,7 @@ export type AuthResponse = {
 export class LoginService {
   private readonly http = inject(HttpClient);
 
-  private readonly baseUrl = 'https://gestao-controle-financeiro-api-production.up.railway.app';
+  private readonly baseUrl = API_BASE_URL;
 
   login(payload: LoginRequest) {
     return this.http.post<AuthResponse>(`${this.baseUrl}/api/usuario/login`, payload);

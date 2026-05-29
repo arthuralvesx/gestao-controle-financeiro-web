@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { API_BASE_URL } from '../../core/api-url';
 
 export interface Meta {
   id: number;
@@ -20,7 +21,7 @@ export interface MovimentacaoMeta {
 @Injectable({ providedIn: 'root' })
 export class MetasService {
   private readonly http = inject(HttpClient);
-  private readonly base = 'https://gestao-controle-financeiro-api-production.up.railway.app/api/metas';
+  private readonly base = `${API_BASE_URL}/api/metas`;
 
   listAll() { return this.http.get<Meta[]>(this.base); }
   incluir(valorMeta: number, valor: number, metaCategoria: string) {

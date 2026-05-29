@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { API_BASE_URL } from '../../core/api-url';
 
 export interface CategoriaResumo {
   categoria: string;
@@ -28,7 +29,7 @@ export interface DashboardResumo {
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
   private readonly http = inject(HttpClient);
-  private readonly base = 'https://gestao-controle-financeiro-api-production.up.railway.app/api/dashboard';
+  private readonly base = `${API_BASE_URL}/api/dashboard`;
 
   resumo() {
     return this.http.get<DashboardResumo>(this.base);

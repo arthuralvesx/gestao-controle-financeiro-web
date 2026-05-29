@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { API_BASE_URL } from '../../core/api-url';
 
 export interface Despesa {
   id: number;
@@ -12,7 +13,7 @@ export interface Despesa {
 @Injectable({ providedIn: 'root' })
 export class DespesaService {
   private readonly http = inject(HttpClient);
-  private readonly base = 'https://gestao-controle-financeiro-api-production.up.railway.app/api/despesa';
+  private readonly base = `${API_BASE_URL}/api/despesa`;
 
   listAll() { return this.http.get<Despesa[]>(this.base); }
   incluir(nome: string, valor: number, data: string, categoria: string) {
