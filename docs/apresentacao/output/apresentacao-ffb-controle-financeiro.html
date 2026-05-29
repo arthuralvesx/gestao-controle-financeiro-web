@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FFB - Apresentação do Projeto</title>
+  <style>
+    :root {
+      --bg: #050807;
+      --header: #07110e;
+      --panel: #111714;
+      --panel-2: #0b1210;
+      --ink: #f8fafc;
+      --muted: #9ca3af;
+      --soft: #bfd6cf;
+      --green: #10b981;
+      --green-2: #00c896;
+      --blue: #60a5fa;
+      --yellow: #f59e0b;
+      --red: #f87171;
+      --line: #22312c;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #020403;
+      color: var(--ink);
+      font-family: "Aptos", "Segoe UI", Arial, sans-serif;
+    }
+
+    .deck {
+      display: grid;
+      gap: 28px;
+      padding: 28px;
+    }
+
+    .slide {
+      position: relative;
+      width: min(1280px, calc(100vw - 56px));
+      aspect-ratio: 16 / 9;
+      margin: 0 auto;
+      overflow: hidden;
+      background: var(--bg);
+      border: 1px solid #17231f;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, .38);
+      page-break-after: always;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 70px;
+      background: var(--header);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .kicker {
+      position: absolute;
+      top: 24px;
+      left: 64px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--green);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--green);
+    }
+
+    .page {
+      position: absolute;
+      right: 64px;
+      bottom: 46px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    h1, h2, p { margin: 0; }
+    .title {
+      position: absolute;
+      left: 64px;
+      top: 102px;
+      width: 820px;
+      font-size: 42px;
+      line-height: 1.08;
+      letter-spacing: 0;
+      font-weight: 850;
+    }
+
+    .subtitle {
+      position: absolute;
+      left: 66px;
+      top: 206px;
+      width: 760px;
+      font-size: 18px;
+      line-height: 1.35;
+      color: var(--soft);
+    }
+
+    .brand {
+      position: absolute;
+      left: 64px;
+      top: 110px;
+      color: var(--green);
+      font-size: 42px;
+      font-weight: 900;
+    }
+
+    .cover-title {
+      position: absolute;
+      left: 64px;
+      top: 178px;
+      width: 760px;
+      font-size: 46px;
+      line-height: 1.08;
+      font-weight: 850;
+    }
+
+    .cover-copy {
+      position: absolute;
+      left: 68px;
+      top: 300px;
+      width: 740px;
+      color: var(--soft);
+      font-size: 20px;
+      line-height: 1.4;
+    }
+
+    .panel {
+      position: absolute;
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+
+    .panel.green-border { border-color: #174438; }
+    .panel h2 {
+      color: var(--green);
+      font-size: 20px;
+      margin-bottom: 26px;
+    }
+    .panel p, .panel li {
+      color: var(--ink);
+      font-size: 20px;
+      line-height: 1.55;
+    }
+    .panel ul { margin: 0; padding-left: 22px; }
+
+    .rule {
+      position: absolute;
+      left: 64px;
+      bottom: 150px;
+      width: 1040px;
+      height: 2px;
+      background: var(--line);
+    }
+
+    .footer-note {
+      position: absolute;
+      left: 66px;
+      bottom: 108px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .cards {
+      position: absolute;
+      left: 70px;
+      top: 300px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      width: 1050px;
+    }
+
+    .card {
+      min-height: 180px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 22px 24px 22px 28px;
+      position: relative;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: var(--accent, var(--green));
+    }
+
+    .card h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    .card p {
+      color: var(--soft);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .metric-rail {
+      position: absolute;
+      left: 72px;
+      bottom: 92px;
+      width: 1048px;
+      height: 72px;
+      background: var(--header);
+      border: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 210px 230px 230px 1fr;
+      align-items: center;
+      padding: 0 30px;
+      gap: 22px;
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--metric, var(--green));
+      font-size: 34px;
+      line-height: 1;
+    }
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .metric-rail .note {
+      color: var(--soft);
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .steps {
+      position: absolute;
+      left: 64px;
+      top: 300px;
+      width: 1088px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 26px;
+    }
+
+    .step {
+      min-height: 210px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 24px 22px;
+    }
+
+    .step strong {
+      color: var(--green);
+      font-size: 22px;
+    }
+    .step h2 {
+      margin-top: 28px;
+      font-size: 22px;
+    }
+    .step p {
+      margin-top: 18px;
+      color: var(--soft);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .bottom-copy {
+      position: absolute;
+      left: 68px;
+      bottom: 112px;
+      width: 940px;
+      color: var(--soft);
+      font-size: 18px;
+    }
+
+    .tech-grid {
+      position: absolute;
+      left: 70px;
+      top: 292px;
+      width: 1036px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 76px;
+    }
+
+    .tech {
+      min-height: 250px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 32px 34px;
+    }
+    .tech h2 {
+      color: var(--green);
+      font-size: 22px;
+      margin-bottom: 24px;
+    }
+    .tech p {
+      white-space: pre-line;
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    .result {
+      position: absolute;
+      left: 70px;
+      bottom: 64px;
+      width: 1036px;
+      min-height: 70px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 18px 24px 18px 30px;
+      border-left: 5px solid var(--green-2);
+    }
+    .result strong { color: var(--ink); }
+    .result span { color: var(--soft); margin-left: 12px; }
+
+    .browser {
+      position: absolute;
+      left: 64px;
+      top: 274px;
+      width: 676px;
+      height: 382px;
+      border: 1px solid #263a34;
+      background: #0a0f0d;
+      overflow: hidden;
+    }
+    .browser-bar {
+      height: 32px;
+      background: #111827;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 20px;
+    }
+    .window-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--red);
+    }
+    .window-dot:nth-child(2) { background: var(--yellow); }
+    .window-dot:nth-child(3) { background: var(--green); }
+    .browser img {
+      width: 100%;
+      height: calc(100% - 32px);
+      object-fit: cover;
+      display: block;
+    }
+
+    .demo-panel {
+      position: absolute;
+      left: 790px;
+      top: 292px;
+      width: 330px;
+      height: 278px;
+      padding: 32px 34px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+    .demo-panel h2 {
+      color: var(--green);
+      font-size: 22px;
+      margin-bottom: 26px;
+    }
+    .demo-panel ol {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    .url-label {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .url {
+      margin-top: 8px;
+      color: var(--green);
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .print-tip {
+      max-width: 1280px;
+      width: min(1280px, calc(100vw - 56px));
+      margin: 0 auto;
+      color: #cbd5e1;
+      font-size: 14px;
+      padding: 12px 0 4px;
+    }
+
+    @media print {
+      body { background: white; }
+      .deck { padding: 0; gap: 0; }
+      .slide {
+        width: 100vw;
+        height: 100vh;
+        border: 0;
+        box-shadow: none;
+      }
+      .print-tip { display: none; }
+      @page {
+        size: 16in 9in;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <div class="print-tip">Apresentação FFB • Use F11 para apresentar em tela cheia. A versão PDF está na mesma pasta.</div>
+
+    <section class="slide">
+      <div class="kicker"><span class="dot"></span>Visão do produto</div>
+      <div class="brand">FFB</div>
+      <h1 class="cover-title">Controle financeiro pessoal, simples e visual.</h1>
+      <p class="cover-copy">Uma aplicação web para registrar receitas, acompanhar despesas, criar metas e transformar dados financeiros em decisões mais claras.</p>
+      <div class="panel green-border" style="left:850px; top:118px; width:310px; height:372px; padding:32px;">
+        <h2>O que ele entrega</h2>
+        <ul>
+          <li>Login funcional</li>
+          <li>Receita mensal</li>
+          <li>Registro de gastos</li>
+          <li>Metas de economia</li>
+          <li>Dashboard com gráficos</li>
+          <li>Dados persistidos em banco</li>
+        </ul>
+      </div>
+      <div class="rule"></div>
+      <div class="footer-note">Projeto Integrador SENAC • Backend Spring Boot + Frontend Angular</div>
+      <div class="page">01</div>
+    </section>
+
+    <section class="slide">
+      <div class="kicker"><span class="dot"></span>Motivação</div>
+      <h1 class="title">Escolhemos finanças porque o problema é cotidiano e fácil de validar.</h1>
+      <p class="subtitle">A dor é comum: muitas pessoas sabem quanto recebem, mas não enxergam com clareza para onde o dinheiro vai.</p>
+      <div class="cards">
+        <div class="card" style="--accent: var(--green);">
+          <h2>Falta de visibilidade</h2>
+          <p>Gastos ficam espalhados e o usuário perde contexto sobre mês, categoria e impacto no saldo.</p>
+        </div>
+        <div class="card" style="--accent: var(--blue);">
+          <h2>Dificuldade de planejar</h2>
+          <p>Sem metas e histórico, a pessoa decide no escuro e reage tarde aos excessos.</p>
+        </div>
+        <div class="card" style="--accent: var(--yellow);">
+          <h2>Oportunidade de aprendizado</h2>
+          <p>O tema conecta frontend, backend, banco de dados, autenticação, UX e análise visual.</p>
+        </div>
+      </div>
+      <div class="metric-rail">
+        <div class="metric" style="--metric: var(--green);"><strong>1</strong><span>problema real</span></div>
+        <div class="metric" style="--metric: var(--blue);"><strong>4</strong><span>módulos principais</span></div>
+        <div class="metric" style="--metric: var(--yellow);"><strong>100%</strong><span>foco em uso prático</span></div>
+        <div class="note">A escolha do tema nasceu da combinação entre utilidade real e boa oportunidade técnica para demonstrar uma aplicação completa.</div>
+      </div>
+      <div class="page">02</div>
+    </section>
+
+    <section class="slide">
+      <div class="kicker"><span class="dot"></span>Plano do projeto</div>
+      <h1 class="title">Definimos um produto pequeno, mas completo o suficiente para simular uso real.</h1>
+      <p class="subtitle">O escopo foi organizado em jornadas: acessar, cadastrar valores, acompanhar indicadores e interpretar o histórico.</p>
+      <div class="steps">
+        <div class="step"><strong>01</strong><h2>Acesso</h2><p>Login e cadastro para identificar o usuário.</p></div>
+        <div class="step"><strong>02</strong><h2>Receita</h2><p>Registro da renda mensal como base do orçamento.</p></div>
+        <div class="step"><strong>03</strong><h2>Despesas</h2><p>Cadastro de gastos com valor, nome e categoria.</p></div>
+        <div class="step"><strong>04</strong><h2>Metas</h2><p>Objetivos financeiros com valor total e saldo guardado.</p></div>
+        <div class="step"><strong>05</strong><h2>Painel</h2><p>Indicadores e gráficos para leitura rápida.</p></div>
+      </div>
+      <p class="bottom-copy">Critério de produto: cada tela precisava resolver uma tarefa clara, com feedback visual e consistência de navegação.</p>
+      <div class="page">03</div>
+    </section>
+
+    <section class="slide">
+      <div class="kicker"><span class="dot"></span>Entrega e tecnologia</div>
+      <h1 class="title">Entregamos uma aplicação web integrada, com dados salvos e leitura visual do orçamento.</h1>
+      <p class="subtitle">O produto final combina API, banco local, frontend responsivo e uma experiência orientada pelas heurísticas de Nielsen.</p>
+      <div class="tech-grid">
+        <div class="tech">
+          <h2>Stack de desenvolvimento</h2>
+          <p>Frontend
+Angular • SCSS • Componentes por página
+
+Backend
+Spring Boot • Java • API REST
+
+Persistência
+H2 Database • Dados locais • Console de inspeção</p>
+        </div>
+        <div class="tech">
+          <h2>O que foi implementado</h2>
+          <p>• Login e cadastro funcionais
+• Dashboard com barra, rosca e histórico
+• Paginação em despesas
+• Máscara monetária brasileira
+• Ícones e botões padronizados
+• Textos revisados com acentos e pontuação</p>
+        </div>
+      </div>
+      <div class="result"><strong>Resultado</strong><span>Uma base funcional que permite evoluir para relatórios, deploy, autenticação mais robusta e recursos de IA financeira.</span></div>
+      <div class="page">04</div>
+    </section>
+
+    <section class="slide">
+      <div class="kicker"><span class="dot"></span>Demonstração</div>
+      <h1 class="title">Na apresentação, o produto deve ser demonstrado navegando pela versão web.</h1>
+      <p class="subtitle">A melhor prova é mostrar o fluxo completo: login, receita, despesa, meta e painel.</p>
+      <div class="browser">
+        <div class="browser-bar"><span class="window-dot"></span><span class="window-dot"></span><span class="window-dot"></span></div>
+        <img src="../assets/login-screenshot.png" alt="Tela de login do sistema FFB" />
+      </div>
+      <div class="demo-panel">
+        <h2>Roteiro de demonstração</h2>
+        <ol>
+          <li>Entrar no sistema</li>
+          <li>Cadastrar receita mensal</li>
+          <li>Registrar uma despesa</li>
+          <li>Criar uma meta</li>
+          <li>Voltar ao painel e interpretar os gráficos</li>
+        </ol>
+        <div class="url-label">URL local</div>
+        <div class="url">http://127.0.0.1:4200</div>
+      </div>
+      <div class="page">05</div>
+    </section>
+  </div>
+</body>
+</html>
